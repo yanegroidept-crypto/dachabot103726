@@ -1,0 +1,33 @@
+name: Join Message Cleanup
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # Каждые 30 минут
+  workflow_dispatch: {}      # Ручной запуск
+
+concurrency:
+  group: dacha-bot-state
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run cleanup joins
+        working-directory: src
+        env:
+          TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          # Для уведомлений об ошибках (run_safely)
+          ADMIN_BOT_TOKEN: ${{ secrets.ADMIN_BOT_TOKEN }}
+          ADMIN_CHAT_ID: ${{ secrets.ADMIN_CHAT_ID }}
+        run: python cleanup_joins.py

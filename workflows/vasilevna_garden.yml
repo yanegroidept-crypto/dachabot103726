@@ -1,0 +1,72 @@
+name: Vasilevna Garden Post
+
+on:
+  schedule:
+    - cron: "36 5 * * *"    # 12:00 МСК (UTC+3) = 09:00 UTC
+  workflow_dispatch: {}
+
+concurrency:
+  group: dacha-bot-state
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run cleanup joins
+        working-directory: src
+        env:
+          TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: python cleanup_joins.py
+
+      - name: Run garden post (Vasilevna)
+        working-directory: src
+        env:
+          TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          TOPIC_ID_GARDEN: ${{ secrets.TOPIC_ID_GARDEN }}
+          GEMINI_KEY_1: ${{ secrets.GEMINI_KEY_1 }}
+          GEMINI_KEY_2: ${{ secrets.GEMINI_KEY_2 }}
+          GEMINI_KEY_3: ${{ secrets.GEMINI_KEY_3 }}
+          GEMINI_KEY_4: ${{ secrets.GEMINI_KEY_4 }}
+          GEMINI_KEY_5: ${{ secrets.GEMINI_KEY_5 }}
+          GEMINI_KEY_6: ${{ secrets.GEMINI_KEY_6 }}
+          GEMINI_KEY_7: ${{ secrets.GEMINI_KEY_7 }}
+          GEMINI_KEY_8: ${{ secrets.GEMINI_KEY_8 }}
+          GEMINI_KEY_9: ${{ secrets.GEMINI_KEY_9 }}
+          GEMINI_KEY_10: ${{ secrets.GEMINI_KEY_10 }}
+        run: python post_garden_vasilevna.py
+
+      - name: Commit state changes
+        if: always()
+        run: |
+          git config user.name "dacha-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/ topics_stack/
+          git diff --cached --quiet || git commit -m "chore: update state after vasilevna garden post"
+          
+          # Цикл повторных попыток на случай параллельных пушей вне группы concurrency
+          for i in {1..5}; do
+            git pull --rebase
+            if git push; then
+              echo "Успешно отправлено в репозиторий!"
+              exit 0
+            fi
+            echo "Ошибка push, пробую снова через 5 секунд..."
+            sleep 5
+          done
+          echo "Не удалось отправить изменения после 5 попыток."
+          exit 1
