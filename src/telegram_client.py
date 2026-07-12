@@ -31,7 +31,7 @@ def send_message(
     bot_token_env: str,
     topic_env: str,
     text: str,
-    disable_notification: bool = False,
+    disable_notification: bool = True,
 ) -> dict:
     token = _get_token(bot_token_env)
     chat_id = os.environ["TG_CHAT_ID"]
@@ -73,7 +73,7 @@ def send_photo(
     topic_env: str,
     photo_path: str,
     caption: str = "",
-    disable_notification: bool = False,
+    disable_notification: bool = True,
 ) -> dict:
     token = _get_token(bot_token_env)
     chat_id = os.environ["TG_CHAT_ID"]
