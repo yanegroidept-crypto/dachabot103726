@@ -1,0 +1,42 @@
+name: Dacha Humor Post
+
+on:
+  schedule:
+    - cron: "27 12 * * *"   # 19:00 МСК (UTC+3) = 16:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run humor post (Vasilevna, Petrovich, Edik)
+        working-directory: src
+        env:
+          TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
+          TG_BOT_TOKEN_PETROVICH: ${{ secrets.TG_BOT_TOKEN_PETROVICH }}
+          TG_BOT_TOKEN_EDIK: ${{ secrets.TG_BOT_TOKEN_EDIK }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          TOPIC_ID_HUMOR: ${{ secrets.TOPIC_ID_HUMOR }}
+        run: python post_humor.py
+
+      - name: Commit state changes
+        if: always()
+        run: |
+          git config user.name "dacha-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add state/
+          git diff --cached --quiet || git commit -m "chore: update state after humor post"
+          git pull --rebase
+          git push
