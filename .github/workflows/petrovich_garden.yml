@@ -2,7 +2,7 @@ name: Petrovich Garden Post
 
 on:
   schedule:
-    - cron: "4 11 * * *"   # 17:00 МСК (UTC+3) = 14:00 UTC
+    - cron: "4 11 * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -14,14 +14,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check cycle day (day 1 = Petrovich)
+        id: cycle
+        run: |
+          EPOCH_DAY="2026-07-13"  # тот же якорь, что и у Васильевны/юмора
+          DAYS_SINCE=$(( ( $(date -u +%s) - $(date -u -d "$EPOCH_DAY" +%s) ) / 86400 ))
+          CYCLE_DAY=$(( DAYS_SINCE % 3 ))
+          echo "Cycle day: $CYCLE_DAY"
+          if [ "$CYCLE_DAY" -eq "1" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.cycle.outputs.run == 'true'
         with:
           python-version: "3.12"
 
       - name: Install dependencies
+        if: steps.cycle.outputs.run == 'true'
         run: pip install -r requirements.txt
 
       - name: Run garden post (Petrovich)
+        if: steps.cycle.outputs.run == 'true'
         working-directory: src
         env:
           TG_BOT_TOKEN_PETROVICH: ${{ secrets.TG_BOT_TOKEN_PETROVICH }}
@@ -40,7 +56,7 @@ jobs:
         run: python post_garden_petrovich.py
 
       - name: Commit state changes
-        if: always()
+        if: always() && steps.cycle.outputs.run == 'true'
         run: |
           git config user.name "dacha-bot"
           git config user.email "bot@users.noreply.github.com"
