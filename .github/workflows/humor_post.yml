@@ -2,7 +2,7 @@ name: Dacha Humor Post
 
 on:
   schedule:
-    - cron: "27 12 * * *"   # 19:00 МСК (UTC+3) = 16:00 UTC
+    - cron: "27 12 * * *" 
   workflow_dispatch: {}
 
 permissions:
@@ -14,14 +14,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check cycle day (day 2 = humor day, all three)
+        id: cycle
+        run: |
+          EPOCH_DAY="2026-07-13"  # тот же якорь, что и у Васильевны/Петровича
+          DAYS_SINCE=$(( ( $(date -u +%s) - $(date -u -d "$EPOCH_DAY" +%s) ) / 86400 ))
+          CYCLE_DAY=$(( DAYS_SINCE % 3 ))
+          echo "Cycle day: $CYCLE_DAY"
+          if [ "$CYCLE_DAY" -eq "2" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.cycle.outputs.run == 'true'
         with:
           python-version: "3.12"
 
       - name: Install dependencies
+        if: steps.cycle.outputs.run == 'true'
         run: pip install -r requirements.txt
 
       - name: Run humor post (Vasilevna, Petrovich, Edik)
+        if: steps.cycle.outputs.run == 'true'
         working-directory: src
         env:
           TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
@@ -32,7 +48,7 @@ jobs:
         run: python post_humor.py
 
       - name: Commit state changes
-        if: always()
+        if: always() && steps.cycle.outputs.run == 'true'
         run: |
           git config user.name "dacha-bot"
           git config user.email "bot@users.noreply.github.com"
