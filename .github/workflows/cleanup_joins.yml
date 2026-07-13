@@ -1,27 +1,21 @@
 name: Join Message Cleanup
-
 on:
   schedule:
-    - cron: "*/30 * * * *"   # Каждые 30 минут
+    - cron: "*/3 * * * *"   # Каждые 3 минуты
   workflow_dispatch: {}      # Ручной запуск
-
 concurrency:
   group: dacha-bot-state
   cancel-in-progress: false
-
 jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Run cleanup joins
         working-directory: src
         env:
