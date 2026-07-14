@@ -1,4 +1,4 @@
-name: Daily Rotation Post (Vasilevna / Edik / Petrovich / Humor)
+name: Daily Rotation Post (Vasilevna / Edik / Petrovich / Humor / Olya)
 
 on:
   schedule:
@@ -21,16 +21,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run daily rotation (Vasilevna -> Edik -> Petrovich -> Humor)
+      - name: Run daily rotation (Vasilevna -> Edik -> Petrovich -> Humor -> Olya)
         working-directory: src
         env:
           TG_BOT_TOKEN_VASILEVNA: ${{ secrets.TG_BOT_TOKEN_VASILEVNA }}
           TG_BOT_TOKEN_PETROVICH: ${{ secrets.TG_BOT_TOKEN_PETROVICH }}
           TG_BOT_TOKEN_EDIK: ${{ secrets.TG_BOT_TOKEN_EDIK }}
+          TG_BOT_TOKEN_OLYA: ${{ secrets.TG_BOT_TOKEN_OLYA }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           TOPIC_ID_GARDEN: ${{ secrets.TOPIC_ID_GARDEN }}
           TOPIC_ID_EDIK: ${{ secrets.TOPIC_ID_EDIK }}
           TOPIC_ID_HUMOR: ${{ secrets.TOPIC_ID_HUMOR }}
+          TOPIC_ID_OLYA: ${{ secrets.TOPIC_ID_OLYA }}
           GEMINI_KEY_1: ${{ secrets.GEMINI_KEY_1 }}
           GEMINI_KEY_2: ${{ secrets.GEMINI_KEY_2 }}
           GEMINI_KEY_3: ${{ secrets.GEMINI_KEY_3 }}
