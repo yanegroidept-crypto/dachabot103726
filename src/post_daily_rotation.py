@@ -29,7 +29,7 @@ import post_humor
 import post_garden_olya
 
 # День 1 цикла (Васильевна) — 14 июля 2026.
-CYCLE_START_DATE = datetime.date(2026, 7, 13)
+CYCLE_START_DATE = datetime.date(2026, 7, 10)
 
 # Порядок действий в цикле, индекс 0..4.
 CYCLE_ACTIONS = [
