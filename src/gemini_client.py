@@ -7,13 +7,11 @@
 
 Ключи ожидаются в переменных окружения GEMINI_KEY_1 ... GEMINI_KEY_10.
 
-Логика модели/ретраев — цепочка из трёх моделей, от самой сильной
-к самой быстрой/дешёвой:
-1. gemini-3.1-pro-preview — до MAX_RETRIES_PER_MODEL попыток
+Логика модели/ретраев — цепочка из двух моделей, от более
+качественной/быстрой к самой дешёвой:
+1. gemini-3.5-flash — до MAX_RETRIES_PER_MODEL попыток
    (с ротацией ключа перед каждой попыткой).
-2. Если все попытки провалились — gemini-3.5-flash, снова до
-   MAX_RETRIES_PER_MODEL попыток.
-3. Если и она не сработала — gemini-3.1-flash-lite, тоже до
+2. Если все попытки провалились — gemini-3.1-flash-lite, тоже до
    MAX_RETRIES_PER_MODEL попыток.
 Если не сработала ни одна модель — пробрасываем последнее исключение.
 """
@@ -34,7 +32,7 @@ NUM_KEYS = 10
 # Цепочка моделей по убыванию приоритета.
 # Может быть переопределена через переменную окружения GEMINI_MODEL_CHAIN
 # (перечисление через запятую, например: GEMINI_MODEL_CHAIN=gemini-2.5-pro,gemini-2.5-flash).
-DEFAULT_MODEL_CHAIN = ["gemini-3.1-pro-preview", "gemini-3.5-flash", "gemini-3.1-flash-lite"]
+DEFAULT_MODEL_CHAIN = ["gemini-3.5-flash", "gemini-3.1-flash-lite"]
 
 def _get_model_chain() -> list[str]:
     env_val = os.environ.get("GEMINI_MODEL_CHAIN")
@@ -46,7 +44,7 @@ def _get_model_chain() -> list[str]:
 
 MODEL_CHAIN = _get_model_chain()
 DEFAULT_MODEL = MODEL_CHAIN[0]
-MAX_RETRIES_PER_MODEL = 5
+MAX_RETRIES_PER_MODEL = 10
 RETRY_DELAY_SECONDS = 2
 
 
