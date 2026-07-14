@@ -44,8 +44,8 @@ def _get_model_chain() -> list[str]:
 
 MODEL_CHAIN = _get_model_chain()
 DEFAULT_MODEL = MODEL_CHAIN[0]
-MAX_RETRIES_PER_MODEL = 10
-RETRY_DELAY_SECONDS = 2
+MAX_RETRIES_PER_MODEL = 20
+RETRY_DELAY_SECONDS = 3
 
 
 def _get_keys() -> list[str]:
