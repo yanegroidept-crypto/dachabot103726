@@ -27,7 +27,7 @@ import post_garden_petrovich
 import post_humor
 
 # День 1 цикла (Васильевна) — 14 июля 2026.
-CYCLE_START_DATE = datetime.date(2026, 7, 14)
+CYCLE_START_DATE = datetime.date(2026, 7, 13)
 
 # Порядок действий в цикле, индекс 0..3.
 CYCLE_ACTIONS = [
