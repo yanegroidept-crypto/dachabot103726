@@ -2,7 +2,7 @@ name: Daily Rotation Post (Vasilevna / Edik / Petrovich / Humor)
 
 on:
   schedule:
-    - cron: "36 5 * * *"    # 12:00 МСК (UTC+3) = 09:00 UTC
+    - cron: "36 8 * * *"    # 12:00 МСК (UTC+3) = 09:00 UTC
   workflow_dispatch: {}
 
 permissions:
