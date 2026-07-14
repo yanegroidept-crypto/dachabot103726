@@ -1,5 +1,6 @@
 """
-Пост Эдика в ветку "Дача, сад, огород / Эдик" (топик TOPIC_ID_EDIK).
+Пост Эдика в его СОБСТВЕННЫЙ топик (TOPIC_ID_EDIK) — отдельный от
+"Дача, сад, огород" (TOPIC_ID_GARDEN), где постят Васильевна и Петрович.
 
 В отличие от post_garden_petrovich.py / post_garden_vasilevna.py, в
 стеке topics_stack/edik_garden.json лежат ТОЛЬКО темы (без готового
@@ -35,12 +36,13 @@ def build_prompt(topic: str, character: str, example: str, history: str) -> str:
 
 {character}
 
-Вот пример твоего поста в ветку "Дача, сад, огород" (используй только
-как образец СТИЛЯ, структуры и манеры речи, не копируй текст дословно):
+Вот пример твоего поста в свой топик про дачные технологии и умный дом
+(используй только как образец СТИЛЯ, структуры и манеры речи, не копируй
+текст дословно):
 
 {example}
 
-Напиши СЕГОДНЯШНИЙ пост в ветку "Дача, сад, огород" на тему:
+Напиши СЕГОДНЯШНИЙ пост в свой топик про дачные технологии на тему:
 "{topic}"
 
 Требования:
@@ -82,8 +84,8 @@ def main() -> None:
     today = datetime.date.today().isoformat()
     append_history(CHARACTER_DISPLAY_NAME, summary, today)
 
-    print(f"Пост {CHARACTER_DISPLAY_NAME} в 'Дача, сад, огород' отправлен ({topic['id']}).")
+    print(f"Пост {CHARACTER_DISPLAY_NAME} в его топик отправлен ({topic['id']}).")
 
 
 if __name__ == "__main__":
-    run_safely(main, label="Пост Эдика в 'Дача, сад, огород'")
+    run_safely(main, label="Пост Эдика в его топик")
