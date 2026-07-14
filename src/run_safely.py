@@ -84,8 +84,8 @@ def _validate_env_variables() -> None:
         required += ["TG_BOT_TOKEN_VASILEVNA", "TOPIC_ID_GENERAL", "WEATHER_API_KEY", "DACHA_LAT", "DACHA_LON"]
     elif script_name == "post_evening.py":
         required += ["TG_BOT_TOKEN_VASILEVNA", "TOPIC_ID_GENERAL", "WEATHER_API_KEY", "DACHA_LAT", "DACHA_LON"]
-    elif script_name == "post_milk.py":
-        required += ["TG_BOT_TOKEN_OLYA", "TOPIC_ID_MILK"]
+    elif script_name == "post_garden_olya.py":
+        required += ["TG_BOT_TOKEN_OLYA", "TOPIC_ID_OLYA"]
     elif script_name == "post_garden_vasilevna.py":
         required += ["TG_BOT_TOKEN_VASILEVNA", "TOPIC_ID_GARDEN"]
     elif script_name == "post_garden_petrovich.py":
@@ -96,11 +96,11 @@ def _validate_env_variables() -> None:
         required += ["TG_BOT_TOKEN_VASILEVNA", "TG_BOT_TOKEN_PETROVICH", "TG_BOT_TOKEN_EDIK", "TOPIC_ID_HUMOR"]
     elif script_name == "post_daily_rotation.py":
         # Заранее неизвестно, какое действие цикла выпадет на сегодня,
-        # поэтому проверяем объединение переменных всех четырёх действий —
+        # поэтому проверяем объединение переменных всех пяти действий —
         # лучше упасть сразу с понятной ошибкой в CI, чем на полпути.
         required += [
-            "TG_BOT_TOKEN_VASILEVNA", "TG_BOT_TOKEN_PETROVICH", "TG_BOT_TOKEN_EDIK",
-            "TOPIC_ID_GARDEN", "TOPIC_ID_EDIK", "TOPIC_ID_HUMOR",
+            "TG_BOT_TOKEN_VASILEVNA", "TG_BOT_TOKEN_PETROVICH", "TG_BOT_TOKEN_EDIK", "TG_BOT_TOKEN_OLYA",
+            "TOPIC_ID_GARDEN", "TOPIC_ID_EDIK", "TOPIC_ID_HUMOR", "TOPIC_ID_OLYA",
         ]
     elif script_name == "cleanup_joins.py":
         required += ["TG_BOT_TOKEN_VASILEVNA"]
