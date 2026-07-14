@@ -11,7 +11,7 @@
   },
   {
     "id": "power_bank_survival",
-    "used": false,
+    "used": true,
     "topic": "Powerbank и резервное питание на случай отключения электричества на даче"
   },
   {
