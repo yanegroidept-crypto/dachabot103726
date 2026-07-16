@@ -7,7 +7,7 @@
   },
   {
     "id": "test_real_workout_or_clothes",
-    "used": false,
+    "used": true,
     "topic": "Тест: ты действительно тренируешься или просто носишь спортивный костюм по дому",
     "ready_post": ""
   },
