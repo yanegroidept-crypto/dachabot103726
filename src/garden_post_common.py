@@ -1,16 +1,18 @@
 """
-Общая логика для поста в ветку "Дача, сад, огород":
+Общая логика для поста в тематический топик (используется всеми
+персонажами, у которых в стеке лежит готовый ready_post: Васильевна,
+Петрович, Оля, Эдик):
 1. Берёт следующую тему из стека персонажа (topics_stack.py).
 2. Готовый текст поста (ready_post) слегка адаптирует под стиль
    персонажа, историю чата и текущий контекст через Gemini —
    либо, если хотите публиковать 1-в-1 без Gemini, можно отправлять
    ready_post напрямую (см. флаг USE_GEMINI_ADAPTATION ниже).
-3. Отправляет в топик "Дача, сад, огород".
+3. Отправляет в указанный топик (параметр topic_id_env).
 4. Обновляет историю чата.
 
-Функция garden_post() параметризована именем персонажа, поэтому
-post_garden_vasilevna.py и post_garden_petrovich.py — это тонкие
-обёртки над ней.
+Функция garden_post() параметризована именем персонажа и топиком,
+поэтому post_garden_vasilevna.py, post_garden_petrovich.py,
+post_garden_olya.py и post_garden_edik.py — это тонкие обёртки над ней.
 """
 
 import datetime
@@ -24,14 +26,31 @@ from topics_stack import get_next_topic
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Если True — готовый пост из стека пропускается через Gemini для лёгкой
-# адаптации (стиль, учёт истории). Если False — публикуется как есть,
-# без вызова Gemini (экономит запросы, но менее гибко).
-# Можно переопределить переменной окружения USE_GEMINI_ADAPTATION=false —
-# без деплоя нового кода, например если все 10 ключей исчерпали лимит.
-USE_GEMINI_ADAPTATION = os.environ.get("USE_GEMINI_ADAPTATION", "true").strip().lower() not in (
-    "false", "0", "no",
-)
+
+def _resolve_use_gemini_adaptation(character_key: str, default: bool) -> bool:
+    """
+    Решает, нужно ли гнать готовый ready_post через Gemini для лёгкой
+    адаптации (стиль, учёт истории), или публиковать как есть.
+
+    По умолчанию берётся `default`, переданный вызывающим скриптом
+    (post_garden_<character>.py) — так у каждого персонажа свой
+    базовый режим (например, True для Петровича/Васильевны, False для
+    Оли/Эдика).
+
+    Это можно переопределить без деплоя нового кода через переменные
+    окружения:
+    - USE_GEMINI_ADAPTATION_<CHARACTER_KEY> (приоритет, персонально для
+      одного персонажа, например USE_GEMINI_ADAPTATION_OLYA=true)
+    - USE_GEMINI_ADAPTATION (общий флаг на всех, если персональный не
+      задан) — например, если все 10 ключей Gemini исчерпали лимит и
+      нужно временно отключить адаптацию везде разом.
+    """
+    personal_env = f"USE_GEMINI_ADAPTATION_{character_key.upper()}"
+    if personal_env in os.environ:
+        return os.environ[personal_env].strip().lower() not in ("false", "0", "no")
+    if "USE_GEMINI_ADAPTATION" in os.environ:
+        return os.environ["USE_GEMINI_ADAPTATION"].strip().lower() not in ("false", "0", "no")
+    return default
 
 
 def garden_post(
@@ -39,12 +58,14 @@ def garden_post(
     character_display_name: str,
     stack_filename: str,
     bot_token_env: str,
+    topic_id_env: str = "TOPIC_ID_GARDEN",
+    use_gemini_adaptation: bool = True,
 ) -> None:
     character = (BASE_DIR / "characters" / f"{character_key}.md").read_text(encoding="utf-8")
     topic = get_next_topic(stack_filename)
     history = history_as_text()
 
-    if USE_GEMINI_ADAPTATION:
+    if _resolve_use_gemini_adaptation(character_key, use_gemini_adaptation):
         prompt = f"""Ты — бот-персонаж в дачном Telegram-чате садового товарищества.
 Вот описание твоего стиля и характера:
 
@@ -84,9 +105,9 @@ def garden_post(
         post_text = topic["ready_post"]
         summary = f"{character_display_name} написал(а) пост про: {topic['topic']}"
 
-    send_message(bot_token_env, "TOPIC_ID_GARDEN", post_text, disable_notification=True)
+    send_message(bot_token_env, topic_id_env, post_text, disable_notification=True)
 
     today = datetime.date.today().isoformat()
     append_history(character_display_name, summary, today)
 
-    print(f"Пост {character_display_name} в 'Дача, сад, огород' отправлен ({topic['id']}).")
+    print(f"Пост {character_display_name} в топик {topic_id_env} отправлен ({topic['id']}).")
