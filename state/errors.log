@@ -2,3 +2,4 @@ post_daily_rotation.py:ValueError: Отсутствуют обязательны
 post_milk.py:FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/dachabot103726/dachabot103726/examples/olya_milk.md'
 post_daily_rotation.py:HTTPError: 400 Client Error: Bad Request for url: https://api.telegram.org/bot8757959928:AAEumnJ3mifwh_3KWucDICmJMy3IpWM8Bg0/sendMessage
 post_milk.py:FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/dachabot103726/dachabot103726/examples/olya_milk.md'
+post_daily_rotation.py:HTTPError: 400 Client Error: Bad Request for url: https://api.telegram.org/bot8946930244:AAHEpgvciWCT_gfVX0Uzo4iAaKgyX338I5Y/sendMessage

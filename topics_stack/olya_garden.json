@@ -25,7 +25,7 @@
   },
   {
     "id": "poll_five_minutes_peace_corner",
-    "used": false,
+    "used": true,
     "topic": "Опрос: любимый угол в квартире для «пять минут тишины» — есть такой у каждой",
     "ready_post": ""
   },
