@@ -37,7 +37,7 @@
   },
   {
     "id": "poll_google_self_medication",
-    "used": false,
+    "used": true,
     "topic": "Опрос: что чаще лечим себе сами гуглом, а к врачу идём только когда совсем прижмёт",
     "ready_post": ""
   },
