@@ -55,7 +55,7 @@
   },
   {
     "id": "poll_makeup_purpose",
-    "used": false,
+    "used": true,
     "topic": "Опрос: макияж для себя или для настроения — что выбираешь чаще",
     "ready_post": ""
   },
