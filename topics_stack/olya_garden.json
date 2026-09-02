@@ -79,7 +79,7 @@
   },
   {
     "id": "test_motivation_type",
-    "used": false,
+    "used": true,
     "topic": "Тест: какой у тебя тип мотивации — «дедлайн», «вдохновение» или «чувство вины»",
     "ready_post": ""
   },
