@@ -91,7 +91,7 @@
   },
   {
     "id": "test_travel_parent_type",
-    "used": false,
+    "used": true,
     "topic": "Тест: какой ты родитель в путешествии — «всё по плану» или «куда кривая выведет»",
     "ready_post": ""
   },
