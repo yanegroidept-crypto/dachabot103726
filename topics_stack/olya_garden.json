@@ -115,7 +115,7 @@
   },
   {
     "id": "poll_biggest_home_annoyance",
-    "used": false,
+    "used": true,
     "topic": "Опрос: что бесит в доме больше всего — вечный бардак на столе или носки не в паре",
     "ready_post": ""
   },
