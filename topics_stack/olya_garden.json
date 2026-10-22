@@ -139,7 +139,7 @@
   },
   {
     "id": "test_rest_or_cleaning",
-    "used": false,
+    "used": true,
     "topic": "Тест: ты умеешь отдыхать или у тебя отдых = уборка дома в тишине",
     "ready_post": ""
   },
