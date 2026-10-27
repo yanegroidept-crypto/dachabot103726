@@ -145,7 +145,7 @@
   },
   {
     "id": "poll_romance_vs_reliability",
-    "used": false,
+    "used": true,
     "topic": "Опрос: что цените в партнёре больше — романтику или надёжность в быту",
     "ready_post": ""
   },
