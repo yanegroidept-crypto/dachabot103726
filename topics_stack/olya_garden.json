@@ -175,7 +175,7 @@
   },
   {
     "id": "renovation_finished_myth",
-    "used": false,
+    "used": true,
     "topic": "«Ремонт закончился» — миф или свежая городская легенда, которую никто не видел вживую",
     "ready_post": ""
   },
